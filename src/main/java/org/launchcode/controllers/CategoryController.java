@@ -27,6 +27,4 @@ public class CategoryController {
         return "category/index";
 
     }
-
-
 }
