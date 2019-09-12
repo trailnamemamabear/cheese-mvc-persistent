@@ -4,12 +4,11 @@
 
 <body class="container">
 
-<h1 th:text="${title}">Default Title</h1>
+<h1 th:text="${title}">Cheeses</h1>
 
 <nav th:replace="fragments :: navigation"></nav>
 
-<p th:unless="${cheeses} and ${cheeses.size()}">no cheese :(</p>
-
+<p th:unless="${cheeses} and ${cheeses.size()}">no cheeses yet</p>
 
 <table class="table">
 
