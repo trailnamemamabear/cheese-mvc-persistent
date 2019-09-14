@@ -20,29 +20,32 @@ public class CategoryController {
     private CategoryDao categoryDao;
 
     @RequestMapping(value = "")
-    public String index(Model model) {
-        model.addAttribute("categories", categoryDao.findAll());
+    public String index(Model model){
+
         model.addAttribute("title", "Categories");
+        model.addAttribute("categories", categoryDao.findAll());
 
         return "category/index";
 
-        @RequestMapping(value = "add", method = RequestMethod.GET)
-        public String add (Model model){
-            model.addAttribute("title", "Category");
-            model.addAttribute("category", new Category());
+    }
+    @RequestMapping(value = "add", method = RequestMethod.GET)
+    public String displayAddCategoryForm(Model model){
+
+        model.addAttribute("title", "Add Category");
+        model.addAttribute(new Category());
+
+        return "category/add";
+
+    }
+    @RequestMapping(value = "add", method = RequestMethod.POST)
+    public String processAddCategoryForm(Model model,
+                                         @ModelAttribute @Valid Category category, Errors errors){
+
+        if(errors.hasErrors()){
+            model.addAttribute("title", "Add Category");
             return "category/add";
         }
-
-        @RequestMapping(value = "add", method = RequestMethod.POST)
-        public String add (Model model, @ModelAttribute @Valid Category category, Errors errors){
-            if (errors.hasErrors()) {
-                model.addAttribute("category", new Category());
-                model.addAttribute("title", "Add Category?");
-                return "category/add";
-            }
-            categoryDao.save(category);
-            return "redirect:";
-
-        }
+        categoryDao.save(category);
+        return "redirect:";
     }
 }

@@ -20,9 +20,11 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("cheese")
 public class CheeseController {
-
     @Autowired
     private CheeseDao cheeseDao;
+
+    @Autowired
+    private CategoryDao categoryDao;
 
     // Request path: /cheese
     @RequestMapping(value = "")
@@ -38,19 +40,21 @@ public class CheeseController {
     public String displayAddCheeseForm(Model model) {
         model.addAttribute("title", "Add Cheese");
         model.addAttribute(new Cheese());
-        model.addAttribute("cheeseTypes", CheeseType.values());
+        model.addAttribute("categories", categoryDao.findAll());
         return "cheese/add";
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public String processAddCheeseForm(@ModelAttribute  @Valid Cheese newCheese,
-                                       Errors errors, Model model) {
+                                       Errors errors, @RequestParam(value = "categoryId", required = true) int categoryId, Model model) {
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add Cheese");
+            model.addAttribute("categories", categoryDao.findAll());
             return "cheese/add";
         }
-
+        Category cat = categoryDao.findOne(categoryId);
+        newCheese.setCategory(cat);
         cheeseDao.save(newCheese);
         return "redirect:";
     }
@@ -63,7 +67,7 @@ public class CheeseController {
     }
 
     @RequestMapping(value = "remove", method = RequestMethod.POST)
-    public String processRemoveCheeseForm(@RequestParam int[] cheeseIds) {
+    public String processRemoveCheeseForm(@RequestParam(value = "cheeseIds", required = true) int[] cheeseIds) {
 
         for (int cheeseId : cheeseIds) {
             cheeseDao.delete(cheeseId);
@@ -71,5 +75,15 @@ public class CheeseController {
 
         return "redirect:";
     }
+    @RequestMapping(value = "category", method = RequestMethod.GET)
+    public String category(Model model, @RequestParam(value = "id", required = true) int id){
 
+        Category cat = categoryDao.findOne(id);
+        List<Cheese> cheeses = cat.getCheeses();
+        model.addAttribute("cheeses", cheeses);
+        model.addAttribute("title", "Cheeses in Category:" + cat.getName());
+        return "cheese/index";
+
+    }
 }
+
