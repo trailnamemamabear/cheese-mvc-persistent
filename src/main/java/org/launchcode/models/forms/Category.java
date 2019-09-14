@@ -1,9 +1,9 @@
-package org.launchcode.models;
+package org.launchcode.models.forms;
 
 /**
  * Created by LaunchCode
  */
-public enum CheeseType {
+public enum Category {
 
     HARD ("Hard"),
     SOFT ("Soft"),
@@ -11,7 +11,7 @@ public enum CheeseType {
 
     private final String name;
 
-    CheeseType(String name) {
+    Category(String name) {
         this.name = name;
     }
 
