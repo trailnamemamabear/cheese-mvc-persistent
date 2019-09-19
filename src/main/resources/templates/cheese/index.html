@@ -4,11 +4,12 @@
 
 <body class="container">
 
-<h1 th:text="${title}">Cheeses</h1>
+<h1 th:text="${title}">Default Title</h1>
 
 <nav th:replace="fragments :: navigation"></nav>
 
-<p th:unless="${cheeses} and ${cheeses.size()}">no cheeses yet</p>
+<p th:unless="${cheeses} and ${cheeses.size()}">no cheese :(</p>
+
 
 <table class="table">
 
@@ -24,12 +25,8 @@
         <td th:text="${cheese.category.name}"></td>
     </tr>
 
-    <p>
-        <a href="/cheese/add">Add Cheese</a> |
-        <a href="/cheese/remove">Remove Cheese</a>
-    </p>
-
 </table>
-
+<a href="/cheese/add">Add</a> |
+<a href="/cheese/remove">Remove</a>
 </body>
 </html>
